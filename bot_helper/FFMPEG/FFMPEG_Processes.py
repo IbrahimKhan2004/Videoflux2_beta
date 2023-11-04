@@ -202,32 +202,34 @@ class FFMPEG:
         return
     ###############------Change_Metadata------###############
     async def change_metadata(process_status):
-    if get_data()[process_status.user_id]['custom_metadata']:
-        dl_loc = f'{str(process_status.send_files[-1])}'
-        direc = f"{process_status.dir}/metadata/"
-        create_direc(direc)
-        output_meta = f"{direc}/{get_output_name(process_status)}"
-        custom_metadata_title = get_data()[process_status.user_id]['metadata']
-        process_status.update_process_message(f"🪀Changing MetaData\n{process_status.get_task_details()}")
-        cmd_meta = ["ffmpeg", "-i", f"{dl_loc}", f"-metadata", f"title={new_title_metadata}", "-metadata:s:a", f"title={new_title_metadata}", f"-metadata:s:s", f"title={new_title_metadata}", "-map", "0", "-c", "copy", '-y', f"{output_meta}"]
-        if not met_result:
-            cmd_meta = ["ffmpeg", "-i", f"{dl_loc}", f"-metadata:s:a", f"title={new_title_metadata}", "-map", "0", "-c", "copy", '-y', f"{output_meta}"]
-            met_result = await run_process_command(cmd_meta)
-        if not met_result:
-            cmd_meta = ["ffmpeg", "-i", f"{dl_loc}", f"-metadata:s:s", f"title={new_title_metadata}", "-map", "0", "-c", "copy", '-y', f"{output_meta}"]
-            met_result = await run_process_command(cmd_meta)
-        if met_result:
-            await process_status.event.reply(f"✅Metadata Set Successfully")
-            caption = f"✅Metadata: {new_title_metadata}\n" + caption if process_status.caption else ''
-            process_status.set_caption(caption)
-            process_status.append_send_files_loc(output_meta)
-            return
+        if get_data()[process_status.user_id]['custom_metadata']:
+                dl_loc = f'{str(process_status.send_files[-1])}'
+                direc = f"{process_status.dir}/metadata/"
+                create_direc(direc)
+                output_meta = f"{direc}/{get_output_name(process_status)}"
+                custom_metadata_title = get_data()[process_status.user_id]['metadata']
+                process_status.update_process_message(f"🪀Changing MetaData\n{process_status.get_task_details()}")
+                cmd_meta = ["ffmpeg", "-i", f"{dl_loc}", f"-metadata:s:a", f"title={custom_metadata_title}", f"-metadata:s:s", f"title={custom_metadata_title}", "-map", "0", "-c", "copy", '-y', f"{output_meta}"]
+                met_result = await run_process_command(cmd_meta)
+                if not met_result:
+                        cmd_meta = ["ffmpeg", "-i", f"{dl_loc}", f"-metadata:s:a", f"title={custom_metadata_title}", "-map", "0", "-c", "copy", '-y', f"{output_meta}"]
+                        met_result = await run_process_command(cmd_meta)
+                if not met_result:
+                        cmd_meta = ["ffmpeg", "-i", f"{dl_loc}", f"-metadata:s:s", f"title={custom_metadata_title}", "-map", "0", "-c", "copy", '-y', f"{output_meta}"]
+                        met_result = await run_process_command(cmd_meta)
+                if met_result:
+                        await process_status.event.reply(f"✅Metadata Set Successfully")
+                        caption = f"✅Metadata: {custom_metadata_title}\n" + caption if process_status.caption else ''
+                        process_status.set_caption(caption)
+                        process_status.append_send_files_loc(output_meta)
+                        return
+                else:
+                        await process_status.event.reply(f"❗Failed To Set MetaData")
+                        return
         else:
-            await process_status.event.reply(f"❗Failed To Set MetaData")
             return
-    else:
-        return
-
+    
+    
     ###############------Select_Audio------###############
     async def select_audio(process_status):
                                         if get_data()[process_status.user_id]['select_stream']:
