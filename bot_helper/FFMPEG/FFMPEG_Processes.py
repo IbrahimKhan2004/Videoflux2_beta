@@ -202,7 +202,6 @@ class FFMPEG:
         return
     ###############------Change_Metadata------###############
     async def change_metadata(process_status):
-    if customasync def change_metadata(process_status):
     if get_datasync def change_metadata(process_status):
         if get_data()[process_status.user_id]['custom_metadata']:
                 dl_loc = f'{str(process_status.send_files[-1])}'
